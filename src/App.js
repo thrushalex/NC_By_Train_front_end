@@ -22,6 +22,13 @@ function App() {
               <Nav.Link as={Link} to="/routes">
                 Routes
               </Nav.Link>
+              {/* Update links when working on this functionlity */}
+              <Nav.Link as={Link} to="/routes">
+                Timetables
+              </Nav.Link>
+              <Nav.Link as={Link} to="/routes">
+                Tickets
+              </Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>
