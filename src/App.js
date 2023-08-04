@@ -10,7 +10,7 @@ import './App.css';
 function App() {
   return (
     <div className="App">
-      <Navbar className="navbar" bg="primary" expands="lg" sticky="top" variant = "dark">
+      <Navbar className="navbar" expands="lg" sticky="top" variant = "light">
         <Container className="container-fluid">
           <Navbar.Brand href="/">
             <img src="/images/train_icon.svg" alt="train logo" className="trainLogo"/>
