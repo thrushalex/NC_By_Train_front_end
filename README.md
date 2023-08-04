@@ -7,4 +7,4 @@ Work done for Iteration 1 (Alex Thrush):
 - Began changing style elements to make meaningfully different from homeworks
 - Deployed current version
 
-![Alt text](/public/images/iter1frontend?raw=true "Newly Created Review")
+![Alt text](public\images\iter1frontend.PNG "Front page")
