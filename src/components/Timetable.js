@@ -93,7 +93,8 @@ const Timetable = props => {
 
     return (
         <div className="App">
-            <Form>
+            <div className="timetableContainer">
+                <Form>
                     <Row>
                         <Col>
                             <Form.Group className="mb-3">
@@ -141,7 +142,7 @@ const Timetable = props => {
                     </Row>
                 </Form>
                 <div>
-                    <table>
+                    <table className="timetable">
                         <tr>
                             <th>
                                 Stop
@@ -149,29 +150,30 @@ const Timetable = props => {
                             { timetable.trains?.map((train, index) => {
                                     return (
                                         <th key={index}>
-                                            {train}
+                                            Train {train}
                                         </th>
                                     )
                                 })}
                         </tr>
+                        { timetable.stops?.map((stop, index) => {
+                            return (
+                                <tr key={index}>
+                                    <td>
+                                        {stop}
+                                    </td>
+                                    { timetable.trains?.map((train, index2) => {
+                                        return (
+                                            <td>
+                                                {timetable.times[index][index2]}
+                                            </td>
+                                        )
+                                    })}
+                                </tr>
+                            )
+                        })}
                     </table>
-                    { timetable.stops?.map((stop, index) => {
-                        return (
-                            <tr key={index}>
-                                <td>
-                                    {stop}
-                                </td>
-                                { timetable.trains?.map((train, index2) => {
-                                    return (
-                                        <td>
-                                            {timetable.times[index][index2]}
-                                        </td>
-                                    )
-                                })}
-                            </tr>
-                        )
-                    })}
-                </div>
+                </div>                
+            </div>
         </div>
     )
 }
