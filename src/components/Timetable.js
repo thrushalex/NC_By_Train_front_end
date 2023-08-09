@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import RoutesDataService from "../services/routes";
+import TimetablesDataService from "../services/timetables";
 
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -14,6 +15,8 @@ const Timetable = props => {
     const [route, setRoute] = useState("");
     const [routeDestinations, setRouteDestinations] = useState([]);
     const [destination, setDestination] = useState("");
+    const [timetable, setTimetable] = useState([]);
+    const [stops, setStops] = useState([]);
 
     const retrieveRouteNames = useCallback(() => {
         RoutesDataService.getRouteNames()
@@ -61,6 +64,19 @@ const Timetable = props => {
         }
     }, [routeDestinations])
 
+    // Set default timetable based on default destination
+    useEffect(() => {
+        TimetablesDataService.getTimetableByName(route, destination)
+        .then(response => {
+            console.log(response.data);
+            setTimetable(response.data);
+            setStops(response.data.stops);
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    }, [destination])
+
     const onChangeRoute = e => {
         const selectedRoute = e.target.value;
         setRoute(selectedRoute);
@@ -70,7 +86,6 @@ const Timetable = props => {
     const onChangeDestination = e => {
         const selectedDestination = e.target.value;
         setDestination(selectedDestination);
-        
     }
 
     const searchForTimetable = e => {
@@ -127,6 +142,16 @@ const Timetable = props => {
                         </Col>
                     </Row>
                 </Form>
+                <div>
+                    { stops.map((stop, index) => {
+                        return (
+                            <div>
+                                {stop}
+                                {timetable.times[index]}
+                            </div>
+                        )
+                    })}
+                </div>
         </div>
     )
 }
