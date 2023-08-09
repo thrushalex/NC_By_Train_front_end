@@ -16,7 +16,6 @@ const Timetable = props => {
     const [routeDestinations, setRouteDestinations] = useState([]);
     const [destination, setDestination] = useState("");
     const [timetable, setTimetable] = useState([]);
-    const [stops, setStops] = useState([]);
 
     const retrieveRouteNames = useCallback(() => {
         RoutesDataService.getRouteNames()
@@ -70,7 +69,6 @@ const Timetable = props => {
         .then(response => {
             console.log(response.data);
             setTimetable(response.data);
-            setStops(response.data.stops);
         })
         .catch(e => {
             console.log(e);
@@ -143,11 +141,18 @@ const Timetable = props => {
                     </Row>
                 </Form>
                 <div>
-                    { stops.map((stop, index) => {
+                    { timetable.stops?.map((stop, index) => {
                         return (
-                            <div>
+                            <div key={index}>
                                 {stop}
                                 {timetable.times[index]}
+                                { timetable.trains?.map((train, index2) => {
+                                    return (
+                                        <div key={index2}>
+                                            {train}
+                                        </div>
+                                    )
+                                })}
                             </div>
                         )
                     })}
