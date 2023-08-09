@@ -141,19 +141,34 @@ const Timetable = props => {
                     </Row>
                 </Form>
                 <div>
-                    { timetable.stops?.map((stop, index) => {
-                        return (
-                            <div key={index}>
-                                {stop}
-                                {timetable.times[index]}
-                                { timetable.trains?.map((train, index2) => {
+                    <table>
+                        <tr>
+                            <th>
+                                Stop
+                            </th>
+                            { timetable.trains?.map((train, index) => {
                                     return (
-                                        <div key={index2}>
+                                        <th key={index}>
                                             {train}
-                                        </div>
+                                        </th>
                                     )
                                 })}
-                            </div>
+                        </tr>
+                    </table>
+                    { timetable.stops?.map((stop, index) => {
+                        return (
+                            <tr key={index}>
+                                <td>
+                                    {stop}
+                                </td>
+                                { timetable.trains?.map((train, index2) => {
+                                    return (
+                                        <td>
+                                            {timetable.times[index][index2]}
+                                        </td>
+                                    )
+                                })}
+                            </tr>
                         )
                     })}
                 </div>
