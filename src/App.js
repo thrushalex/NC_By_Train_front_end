@@ -4,6 +4,7 @@ import Container from "react-bootstrap/Container";
 import { Navbar, Nav } from "react-bootstrap";
 
 import RoutesList from "./components/RoutesList.js";
+import Timetable from "./components/Timetable.js";
 
 import './App.css';
 
@@ -23,7 +24,7 @@ function App() {
                 Routes
               </Nav.Link>
               {/* Update links when working on this functionlity */}
-              <Nav.Link as={Link} to="/routes">
+              <Nav.Link as={Link} to="/timetable">
                 Timetables
               </Nav.Link>
               <Nav.Link as={Link} to="/routes">
@@ -40,6 +41,9 @@ function App() {
         />
         <Route exact path="/routes" element={
           <RoutesList />}
+        />
+        <Route exact path="/timetable" element={
+          <Timetable />}
         />
       </Routes>
     </div>
