@@ -13,8 +13,10 @@ const Timetable = props => {
 
     const [routeNames, setRouteNames] = useState([]);
     const [route, setRoute] = useState("");
+    const [routeIndex, setRouteIndex] = useState(0);
     const [routeDestinations, setRouteDestinations] = useState([]);
     const [destination, setDestination] = useState("");
+    const [destinationIndex, setDestinationIndex] = useState(0);
     const [timetable, setTimetable] = useState([]);
 
     const retrieveRouteNames = useCallback(() => {
@@ -30,7 +32,7 @@ const Timetable = props => {
     // Set routeName to first on element of array on page load, get destinations
     useEffect(() => {
         if (routeNames.length > 0) {
-            setRoute(routeNames[0]);
+            setRoute(routeNames[routeIndex]);
         }
     }, [routeNames])
 
@@ -51,37 +53,40 @@ const Timetable = props => {
     // Get destinations based on default route
     useEffect(() => {
         retrieveRouteDestinations();
-        if (routeDestinations.length > 0) {
-            setDestination(routeDestinations[0]);
-            renderSearchBars();
-        }
+        // if (routeDestinations.length > 0) {
+        //     setDestination(routeDestinations[0]);
+        //     renderSearchBars();
+        // }
     }, [route])
 
     // Set default destination based on default route
     useEffect(() => {
         if (routeDestinations.length > 0) {
-            setDestination(routeDestinations[0]);
+            setDestination(routeDestinations[destinationIndex]);
         }
     }, [routeDestinations])
 
     const onChangeRoute = e => {
-        const selectedRoute = e.target.value;
+        const len = e.target.value.length;
+        const selectedRoute = e.target.value.substr(0,len - 2);
+        const index = e.target.value[e.target.value.length - 1];
         setRoute(selectedRoute);
+        setRouteIndex(index);
         retrieveRouteDestinations();
     }
 
     const onChangeDestination = e => {
-        const selectedDestination = e.target.value;
+        const len = e.target.value.length;
+        const selectedDestination = e.target.value.substr(0,len - 2);
+        const index = e.target.value[e.target.value.length - 1];
         setDestination(selectedDestination);
+        setDestinationIndex(index);
     }
 
     const searchForTimetable = () => {
-        console.log("Route is: ", route);
-        console.log("Destination is: ", destination);
         if (route && destination) {
             TimetablesDataService.getTimetableByName(route, destination)
             .then(response => {
-                console.log(response.data);
                 setTimetable(response.data);
             })
             .catch(e => {
@@ -102,7 +107,8 @@ const Timetable = props => {
                             >
                                 { routeNames.map((route, i) =>{
                                     return (
-                                        <option value={route}
+                                        // <option value={[routea,i]}
+                                        <option value={[route, i]}
                                         key={i}>
                                             {route}
                                         </option>
@@ -117,11 +123,11 @@ const Timetable = props => {
                                 as="select"
                                 onChange={onChangeDestination}
                             >
-                                { routeDestinations.map((rating, i) =>{
+                                { routeDestinations.map((destination, i2) =>{
                                     return (
-                                        <option value={rating}
-                                        key={i}>
-                                            {rating}
+                                        <option value={[destination, i2]}
+                                        key={i2}>
+                                            {destination}
                                         </option>
                                     )
                                 })}
