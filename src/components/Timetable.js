@@ -27,6 +27,13 @@ const Timetable = props => {
         })
     }, [])
 
+    // Set routeName to first on element of array on page load, get destinations
+    useEffect(() => {
+        if (routeNames.length > 0) {
+            setRoute(routeNames[0]);
+        }
+    }, [routeNames])
+
     const retrieveRouteDestinations = useCallback(() => {
         RoutesDataService.getRouteDestinationsByName(route)
         .then(response => {
@@ -41,18 +48,12 @@ const Timetable = props => {
         retrieveRouteNames();
     }, [])
 
-    // Set routeName to first on element of array on page load, get destinations
-    useEffect(() => {
-        if (routeNames.length > 0) {
-            setRoute(routeNames[0]);
-        }
-    }, [routeNames])
-
     // Get destinations based on default route
     useEffect(() => {
         retrieveRouteDestinations();
         if (routeDestinations.length > 0) {
             setDestination(routeDestinations[0]);
+            renderSearchBars();
         }
     }, [route])
 
@@ -62,18 +63,6 @@ const Timetable = props => {
             setDestination(routeDestinations[0]);
         }
     }, [routeDestinations])
-
-    // Set default timetable based on default destination
-    useEffect(() => {
-        TimetablesDataService.getTimetableByName(route, destination)
-        .then(response => {
-            console.log(response.data);
-            setTimetable(response.data);
-        })
-        .catch(e => {
-            console.log(e);
-        })
-    }, [destination])
 
     const onChangeRoute = e => {
         const selectedRoute = e.target.value;
@@ -86,92 +75,116 @@ const Timetable = props => {
         setDestination(selectedDestination);
     }
 
-    const searchForTimetable = e => {
+    const searchForTimetable = () => {
         console.log("Route is: ", route);
         console.log("Destination is: ", destination);
+        TimetablesDataService.getTimetableByName(route, destination)
+        .then(response => {
+            console.log(response.data);
+            setTimetable(response.data);
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    }
+
+    const renderSearchBars = () => {
+        return (
+            <Form>
+                <Row>
+                    <Col>
+                        <Form.Group className="mb-3">
+                            <Form.Control
+                                as="select"
+                                onChange={onChangeRoute}
+                            >
+                                { routeNames.map((route, i) =>{
+                                    return (
+                                        <option value={route}
+                                        key={i}>
+                                            {route}
+                                        </option>
+                                    )
+                                })}
+                            </Form.Control>
+                        </Form.Group>
+                    </Col>
+                    <Col>
+                        <Form.Group className="mb-3">
+                            <Form.Control
+                                as="select"
+                                onChange={onChangeDestination}
+                            >
+                                { routeDestinations.map((rating, i) =>{
+                                    return (
+                                        <option value={rating}
+                                        key={i}>
+                                            {rating}
+                                        </option>
+                                    )
+                                })}
+                            </Form.Control>
+                        </Form.Group>
+                    </Col>
+                    <Col>
+                        <Button
+                            variant="primary"
+                            type="button"
+                            onClick={searchForTimetable}
+                        >
+                            Search
+                        </Button>
+                    </Col>
+                </Row>
+            </Form>
+        )
+    }
+
+    const renderTimeTable = () => {
+        return(
+            <table className="timetable">
+                <tr>
+                    { timetable.trains ? () => {
+                            return (
+                                <th>
+                                    Stop
+                                </th>
+                            )}:console.log('hi')}
+                    { timetable.trains?.map((train, index) => {
+                            return (
+                                <th key={index}>
+                                    Train {train}
+                                </th>
+                            )
+                        })}
+                </tr>
+                { timetable.stops?.map((stop, index) => {
+                    return (
+                        <tr key={index}>
+                            <td>
+                                {stop}
+                            </td>
+                            { timetable.trains?.map((train, index2) => {
+                                return (
+                                    <td>
+                                        {timetable.times[index][index2]}
+                                    </td>
+                                )
+                            })}
+                        </tr>
+                    )
+                })}
+            </table>
+        )
+
     }
 
     return (
         <div className="App">
             <div className="timetableContainer">
-                <Form>
-                    <Row>
-                        <Col>
-                            <Form.Group className="mb-3">
-                                <Form.Control
-                                    as="select"
-                                    onChange={onChangeRoute}
-                                >
-                                    { routeNames.map((route, i) =>{
-                                        return (
-                                            <option value={route}
-                                            key={i}>
-                                                {route}
-                                            </option>
-                                        )
-                                    })}
-                                </Form.Control>
-                            </Form.Group>
-                        </Col>
-                        <Col>
-                            <Form.Group className="mb-3">
-                                <Form.Control
-                                    as="select"
-                                    onChange={onChangeDestination}
-                                >
-                                    { routeDestinations.map((rating, i) =>{
-                                        return (
-                                            <option value={rating}
-                                            key={i}>
-                                                {rating}
-                                            </option>
-                                        )
-                                    })}
-                                </Form.Control>
-                            </Form.Group>
-                        </Col>
-                        <Col>
-                            <Button
-                                variant="primary"
-                                type="button"
-                                onClick={searchForTimetable}
-                            >
-                                Search
-                            </Button>
-                        </Col>
-                    </Row>
-                </Form>
+                {renderSearchBars()}
                 <div>
-                    <table className="timetable">
-                        <tr>
-                            <th>
-                                Stop
-                            </th>
-                            { timetable.trains?.map((train, index) => {
-                                    return (
-                                        <th key={index}>
-                                            Train {train}
-                                        </th>
-                                    )
-                                })}
-                        </tr>
-                        { timetable.stops?.map((stop, index) => {
-                            return (
-                                <tr key={index}>
-                                    <td>
-                                        {stop}
-                                    </td>
-                                    { timetable.trains?.map((train, index2) => {
-                                        return (
-                                            <td>
-                                                {timetable.times[index][index2]}
-                                            </td>
-                                        )
-                                    })}
-                                </tr>
-                            )
-                        })}
-                    </table>
+                    {renderTimeTable()}
                 </div>                
             </div>
         </div>
