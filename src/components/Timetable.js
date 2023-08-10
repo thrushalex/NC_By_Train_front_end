@@ -78,14 +78,16 @@ const Timetable = props => {
     const searchForTimetable = () => {
         console.log("Route is: ", route);
         console.log("Destination is: ", destination);
-        TimetablesDataService.getTimetableByName(route, destination)
-        .then(response => {
-            console.log(response.data);
-            setTimetable(response.data);
-        })
-        .catch(e => {
-            console.log(e);
-        })
+        if (route && destination) {
+            TimetablesDataService.getTimetableByName(route, destination)
+            .then(response => {
+                console.log(response.data);
+                setTimetable(response.data);
+            })
+            .catch(e => {
+                console.log(e);
+            })
+        }
     }
 
     const renderSearchBars = () => {
@@ -141,41 +143,41 @@ const Timetable = props => {
     }
 
     const renderTimeTable = () => {
-        return(
-            <table className="timetable">
-                <tr>
-                    { timetable.trains ? () => {
-                            return (
-                                <th>
-                                    Stop
-                                </th>
-                            )}:console.log('hi')}
-                    { timetable.trains?.map((train, index) => {
-                            return (
-                                <th key={index}>
-                                    Train {train}
-                                </th>
-                            )
-                        })}
-                </tr>
-                { timetable.stops?.map((stop, index) => {
-                    return (
-                        <tr key={index}>
-                            <td>
-                                {stop}
-                            </td>
-                            { timetable.trains?.map((train, index2) => {
+        if (timetable.trains) {
+            return(
+                <table className="timetable">
+                    <tr>
+                        <th>
+                            Stop
+                        </th>
+                        { timetable.trains?.map((train, index) => {
                                 return (
-                                    <td>
-                                        {timetable.times[index][index2]}
-                                    </td>
+                                    <th key={index}>
+                                        Train {train}
+                                    </th>
                                 )
                             })}
-                        </tr>
-                    )
-                })}
-            </table>
-        )
+                    </tr>
+                    { timetable.stops?.map((stop, index) => {
+                        return (
+                            <tr key={index}>
+                                <td>
+                                    {stop}
+                                </td>
+                                { timetable.trains?.map((train, index2) => {
+                                    return (
+                                        <td>
+                                            {timetable.times[index][index2]}
+                                        </td>
+                                    )
+                                })}
+                            </tr>
+                        )
+                    })}
+                </table>
+            )
+        }
+
 
     }
 
