@@ -7,6 +7,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 
 import RoutesList from "./components/RoutesList.js";
 import Timetable from "./components/Timetable.js";
+import Ticket from "./components/Ticket.js";
 import Login from "./components/Login";
 import Logout from "./components/Logout";
 
@@ -37,7 +38,7 @@ function App() {
                 <Nav.Link as={Link} to="/timetable">
                   Timetables
                 </Nav.Link>
-                <Nav.Link as={Link} to="/routes">
+                <Nav.Link as={Link} to="/tickets">
                   Tickets
                 </Nav.Link>
               </Nav>
@@ -59,6 +60,9 @@ function App() {
           />
           <Route exact path="/timetable" element={
             <Timetable />}
+          />
+          <Route exact path="/tickets" element={
+            <Ticket />}
           />
         </Routes>
       </div>
