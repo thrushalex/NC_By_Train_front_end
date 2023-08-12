@@ -78,7 +78,7 @@ const Ticket = ({ user }) => {
                 <Form>
                     <Row>
                         <Col>
-                            Select Route
+                            Route
                             <Form.Group className="mb-3">
                                 <Form.Control
                                     as="select"
@@ -96,7 +96,7 @@ const Ticket = ({ user }) => {
                             </Form.Group>
                         </Col>
                         <Col>
-                            Select Origin
+                            Origin
                             <Form.Group className="mb-3">
                                 <Form.Control
                                     as="select"
@@ -114,7 +114,7 @@ const Ticket = ({ user }) => {
                             </Form.Group>
                         </Col>
                         <Col>
-                            Select Destination
+                            Destination
                             <Form.Group className="mb-3">
                                 <Form.Control
                                     as="select"
@@ -187,7 +187,7 @@ const Ticket = ({ user }) => {
     return (
         <div className="App">
             <ToastContainer position="top-center"/>
-            <div className="ticketContainer">
+            <div className="ticketPurchaseContainer">
                 {renderSelectBars()}
                 <div>
                     Ticket display here
