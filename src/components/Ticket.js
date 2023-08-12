@@ -9,6 +9,8 @@ import Button from 'react-bootstrap/Button';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import { BsPlus, BsDash } from "react-icons/bs";
+import ReactDOM from 'react-dom';
+import {QRCodeSVG} from 'qrcode.react';
 
 import './Ticket.css';
 
@@ -217,6 +219,7 @@ const Ticket = ({ user }) => {
                                 Ticket ID: 
                                 {console.log(ticket._id)}
                                 {ticket._id}
+                                <QRCodeSVG value={ticket._id} />,
                             </div>
                         )
                     })}
