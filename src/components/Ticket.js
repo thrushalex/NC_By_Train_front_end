@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import RoutesDataService from "../services/routes";
-import TimetablesDataService from "../services/timetables";
+import TicketsDataService from "../services/tickets";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -20,10 +20,23 @@ const Ticket = ({ user }) => {
     const [routeNames, setRouteNames] = useState([]);
     const [routeStops, setRouteStops] = useState(["Select a Stop"]);
     const [ticketCount, setTicketCount] = useState(0);
+    const [tickets, setTickets] = useState([]);
+    const [userId, setUserId] = useState("");
+
+    useEffect(() => {
+        if (user) {
+            console.log("userId: ", user.googleId);
+            setUserId(user.googleId);
+        }
+    }, [user])
 
     useEffect(() => {
         retrieveRoutes();
     }, [])
+
+    useEffect(() => {
+        retrieveTickets(userId);
+    }, [userId])
 
     useEffect(() => {
         retrieveRouteStops();
@@ -51,6 +64,17 @@ const Ticket = ({ user }) => {
         }
     }, [route])
 
+    const retrieveTickets = (userId) => {
+        TicketsDataService.getTicketsByUserId(userId)
+        .then(response => {
+            setTickets(response.data);
+            console.log(response.data);
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    }
+
     const onChangeRoute = e => {
         setRoute(e.target.value);
         setOrigin("Select a Stop");
@@ -67,7 +91,7 @@ const Ticket = ({ user }) => {
         setDestination(e.target.value);
     }
     
-    const checkRouteOriginDestination = e => {
+    const purchase = () => {
         console.log("route: ", route, "origin: ", origin, "destination: ", destination);
         toast("Wow so easy!");
     }
@@ -166,7 +190,7 @@ const Ticket = ({ user }) => {
                             <Button
                                 variant="primary"
                                 type="button"
-                                onClick={checkRouteOriginDestination}
+                                onClick={purchase}
                             >
                                 Purchase
                             </Button>
@@ -181,17 +205,32 @@ const Ticket = ({ user }) => {
                 </div>
             )
         }
+    }
 
+    const renderTicketDisplay = () => {
+        if (user) {
+            return(
+                <Row>
+                    { tickets?.map((ticket, index) => {
+                        return (
+                            <div key={index}>
+                                Ticket ID: 
+                                {console.log(ticket._id)}
+                                {ticket._id}
+                            </div>
+                        )
+                    })}
+                </Row>
+            )
+        }
     }
 
     return (
         <div className="App">
             <ToastContainer position="top-center"/>
             <div className="ticketPurchaseContainer">
-                {renderSelectBars()}
-                <div>
-                    Ticket display here
-                </div>                
+                {renderSelectBars()}    
+                {renderTicketDisplay()}    
             </div>
         </div>
     )
