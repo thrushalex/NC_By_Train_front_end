@@ -77,6 +77,9 @@ function App() {
             <Timetable />}
           />
           <Route exact path="/tickets" element={
+            <Ticket user={ user }/>}
+          />
+          <Route exact path="/tickets" element={
             <Ticket />}
           />
         </Routes>

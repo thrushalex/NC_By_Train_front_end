@@ -13,6 +13,10 @@ class RoutesDataService {
     getRouteDestinationsByName(routeName) {
         return axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/v1/routes/routename/${routeName}/termini`);
     }
+
+    getRouteStopsByName(routeName) {
+        return axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/v1/routes/routename/${routeName}/stops`);
+    }
 }
 
 /* eslint import/no-anonymous-default-export: [2, {"allowNew": true}] */
