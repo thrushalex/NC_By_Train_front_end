@@ -96,12 +96,31 @@ const Ticket = ({ user }) => {
     const purchase = () => {
         console.log("route: ", route, "origin: ", origin, "destination: ", destination);
         toast("Wow so easy!");
+        const data = {
+            userId: userId,
+            route: route,
+            origin: origin,
+            destination: destination
+        }       
+        for (let i = 0; i <= ticketCount; i++) {
+            TicketsDataService.addTicket(data)
+            .then(response => {
+                console.log(response.data);
+                
+            })
+            .catch(e => {
+                console.log(e);
+            });
+        }
+        retrieveTickets(userId);
     }
 
     const activateTicket = (ticketId) => {
-        TicketsDataService.activateTicketById(ticketId)
+        TicketsDataService.activateTicketById({ticketId: ticketId})
         .then(response => {
-            console.log(response.data)
+            console.log("activate button pressed");
+            console.log(response.data.status);
+            retrieveTickets(userId);
         })
         .catch(e => {
             console.log(e);
@@ -266,7 +285,7 @@ const Ticket = ({ user }) => {
                     <Button
                         variant="primary"
                         type="button"
-                        onClick={activateTicket(ticketId)}
+                        onClick={() => activateTicket(ticketId)}
                     >
                         Activate Ticket
                     </Button>
