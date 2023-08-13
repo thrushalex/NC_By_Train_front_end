@@ -12,3 +12,7 @@
 .timetable{
     border: 1px solid black;
 }
+
+.titleText{
+    text-align: center;
+}

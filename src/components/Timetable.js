@@ -100,6 +100,9 @@ const Timetable = props => {
             <Form>
                 <Row>
                     <Col>
+                        <div className="titleText">
+                            Route
+                        </div>
                         <Form.Group className="mb-3">
                             <Form.Control
                                 as="select"
@@ -118,6 +121,9 @@ const Timetable = props => {
                         </Form.Group>
                     </Col>
                     <Col>
+                        <div className="titleText">
+                            Direction
+                        </div>
                         <Form.Group className="mb-3">
                             <Form.Control
                                 as="select"
