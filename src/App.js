@@ -56,6 +56,11 @@ function App() {
                 <Nav.Link as={Link} to="/tickets">
                   Tickets
                 </Nav.Link>
+                { user && (
+                  <Nav.Link as={Link} to="/tickets">
+                    Profile
+                  </Nav.Link>
+                                    )}
               </Nav>
             </Navbar.Collapse>
             { user ? (
