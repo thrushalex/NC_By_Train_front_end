@@ -9,6 +9,10 @@ class TicketsDataService {
     getTicketsByUserId(userId) {
         return axios.get(`${process.env.REACT_APP_API_BASE_URL}/api/v1/tickets/user/${userId}`);
     }
+
+    activateTicketById(ticketId) {
+        return axios.put(`${process.env.REACT_APP_API_BASE_URL}/api/v1/tickets/activate`, ticketId);
+    }
 }
 
 /* eslint import/no-anonymous-default-export: [2, {"allowNew": true}] */

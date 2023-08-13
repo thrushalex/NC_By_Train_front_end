@@ -98,6 +98,16 @@ const Ticket = ({ user }) => {
         toast("Wow so easy!");
     }
 
+    const activateTicket = (ticketId) => {
+        TicketsDataService.activateTicketById(ticketId)
+        .then(response => {
+            console.log(response.data)
+        })
+        .catch(e => {
+            console.log(e);
+        });
+    }
+
     const renderSelectBars = () => {
         if (user) {
             return (
@@ -216,14 +226,55 @@ const Ticket = ({ user }) => {
                     { tickets?.map((ticket, index) => {
                         return (
                             <div key={index}>
-                                Ticket ID: 
-                                {console.log(ticket._id)}
-                                {ticket._id}
-                                <QRCodeSVG value={ticket._id} />,
+                                <Row>
+                                    <Col>
+                                    <div>
+                                        Route: {ticket.route}
+                                    </div>
+                                    <div>
+                                        Origin: {ticket.origin}
+                                    </div>
+                                    <div>
+                                        Destination: {ticket.destination}
+                                    </div>
+                                    {ticket.expirationDate ? (
+                                        <div>
+                                            Expiration: {new Date(ticket.expirationDate).toLocaleTimeString("en-US")}
+                                        </div>
+                                    ) : (
+                                        <div>
+                                            Expiration: Not Active
+                                        </div>
+                                    )}
+                                    </Col>
+                                    <Col>
+                                        {renderQRCode(ticket.expirationDate, ticket._id)}
+                                    </Col>
+                                </Row>
                             </div>
                         )
                     })}
                 </Row>
+            )
+        }
+    }
+
+    const renderQRCode = (expirationDate, ticketId) => {
+        if (expirationDate == null) {
+            return(
+                <div>
+                    <Button
+                        variant="primary"
+                        type="button"
+                        onClick={activateTicket(ticketId)}
+                    >
+                        Activate Ticket
+                    </Button>
+                </div>
+            )
+        } else {
+            return(
+                <QRCodeSVG value={ticketId} />
             )
         }
     }
