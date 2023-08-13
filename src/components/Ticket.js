@@ -94,25 +94,31 @@ const Ticket = ({ user }) => {
     }
     
     const purchase = () => {
-        console.log("route: ", route, "origin: ", origin, "destination: ", destination);
-        toast("Wow so easy!");
-        const data = {
-            userId: userId,
-            route: route,
-            origin: origin,
-            destination: destination
-        }       
-        for (let i = 0; i <= ticketCount; i++) {
+        console.log(ticketCount);
+        if (
+            route !== "Select a Route" &&
+            origin !== "Select a Stop" &&
+            destination !== "Select a Stop" &&
+            destination !== origin
+        ) {
+            const data = {
+                userId: userId,
+                route: route,
+                origin: origin,
+                destination: destination,
+                quantity: ticketCount
+            }       
             TicketsDataService.addTicket(data)
             .then(response => {
                 console.log(response.data);
-                
             })
             .catch(e => {
                 console.log(e);
             });
+            retrieveTickets(userId);
+        } else {
+            toast("Purchase not complete, please be sure to fill out all fields");
         }
-        retrieveTickets(userId);
     }
 
     const activateTicket = (ticketId) => {
@@ -244,7 +250,7 @@ const Ticket = ({ user }) => {
                 <Row>
                     { tickets?.map((ticket, index) => {
                         return (
-                            <div key={index}>
+                            <div key={index} className="ticket">
                                 <Row>
                                     <Col>
                                     <div>
