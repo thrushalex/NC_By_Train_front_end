@@ -34,6 +34,10 @@ const Ticket = ({ user }) => {
     }, [user])
 
     useEffect(() => {
+        deleteExpiredTickets(userId);
+    }, [userId])
+
+    useEffect(() => {
         retrieveRoutes();
     }, [])
 
@@ -72,6 +76,16 @@ const Ticket = ({ user }) => {
         .then(response => {
             setTickets(response.data);
             console.log(response.data);
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    }
+
+    const deleteExpiredTickets = (userId) => {
+        TicketsDataService.deleteExpiredTickets(userId)
+        .then(response => {
+            retrieveTickets(userId);
         })
         .catch(e => {
             console.log(e);
