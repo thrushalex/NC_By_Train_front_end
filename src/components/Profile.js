@@ -5,16 +5,19 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
+import ProfilesDataService from "../services/profiles";
 
 import './Profile.css';
 
-const Profile = props => {
+const Profile = ({ user }) => {
 
+    const [userId, setUserId] = useState("");
+    const [profileExists, setProfileExists] = useState(false);
     const [firstName, setFirstName] = useState("");
     const [lastName, setlastName] = useState("");
     const [address, setAddress] = useState("");
     const [city, setCity] = useState("");
-    const [state, setState] = useState("");
+    const [state, setState] = useState("MA");
     const [country, setCountry] = useState("United States");
     const [zipCode, setZipCode] = useState("");
     const [creditCardNumber, setCreditCardNumber] = useState("");
@@ -23,16 +26,85 @@ const Profile = props => {
     "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "MP",
     "OH", "OK", "OR", "PA", "PR", "RI", "SC", "SD", "TN", "TX", "TT", "UT", "VT", "VA", "VI", "WA", "WV", "WI", "WY"];
 
-    const updateInformation = () => {
-        console.log("First name is:", firstName);
-        console.log("Last name is:", lastName);
-        console.log("Address is:", address);
-        console.log("City is:", city);
-        console.log("State is:", state);
-        console.log("Country is:", country);
-        console.log("ZIP code is:", zipCode);
-        console.log("Credit card number is:", creditCardNumber);
-        console.log("CVV is:", cvv);
+    useEffect(() => {
+        if (user) {
+            console.log("userId: ", user.googleId);
+            setUserId(user.googleId);
+        }
+    }, [user])
+
+    useEffect(() => {
+        getProfile();
+    }, [userId])
+
+    const getProfile = useCallback(() => {
+        ProfilesDataService.getProfile(userId)
+        .then(response => {
+            setProfileExists(true);
+            loadProfile(response.data);
+        })
+        .catch(e => {
+            console.log(e);
+            if (e.response.data.error && e.response.data.error === "not found") {
+                setProfileExists(false);
+            }
+        })
+    }, [userId])
+
+    const addProfile = () => {
+        let profile = {
+            userId: userId,
+            firstName: firstName,
+            lastName: lastName,
+            address: address,
+            city: city,
+            state: state,
+            country: country,
+            zipCode: zipCode,
+            creditCardNumber: creditCardNumber,
+            cvv: cvv,
+        };
+        ProfilesDataService.addProfile(profile)
+        .then(response => {
+            toast("Profile added!");
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    }
+
+    const updateProfile = () => {
+        let profile = {
+            userId: userId,
+            firstName: firstName,
+            lastName: lastName,
+            address: address,
+            city: city,
+            state: state,
+            country: country,
+            zipCode: zipCode,
+            creditCardNumber: creditCardNumber,
+            cvv: cvv,
+        };
+        ProfilesDataService.updateProfile(profile)
+        .then(response => {
+            toast("Profile updated!");
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    }
+
+    const loadProfile = (profile) => {
+        setFirstName(profile.firstName);
+        setlastName(profile.lastName);
+        setAddress(profile.address);
+        setCity(profile.city);
+        setState(profile.state);
+        setCountry(profile.country);
+        setZipCode(profile.zipCode);
+        setCreditCardNumber(profile.creditCardNumber);
+        setCVV(profile.cvv);
     }
 
     //Random CC and CVV number generation is to avoid storing real payment info during development
@@ -49,6 +121,32 @@ const Profile = props => {
 
         return Math.floor(Math.random() * (max - min) + min);
     }
+
+    const checkAllFields = () => {
+        if ( firstName !== "" && lastName !== "" && 
+        address !== "" && city !== "" && 
+        state !== "" && zipCode !== "" && 
+        creditCardNumber !== "" && cvv !== ""    
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    const submitProfile = () => {
+        console.log("Profile exists", profileExists);
+        console.log("All fields valid:", checkAllFields());
+        if (checkAllFields() === true && profileExists === false) {
+            addProfile();
+            getProfile();
+        } else if (checkAllFields() === true && profileExists === true) {
+            console.log("Updating profile");
+            updateProfile();
+        }
+    }
+
+
 
     return(
         <div className='profileContainer'>
@@ -67,7 +165,7 @@ const Profile = props => {
                         <Form.Control
                             type="text"
                             placeholder="First name"
-                            // value={firstName}
+                            value={firstName}
                             onChange={(e) => setFirstName(e.target.value)}
                             />
                     </Form.Group>
@@ -84,7 +182,7 @@ const Profile = props => {
                         <Form.Control
                         type="text"
                         placeholder="Last name"
-                        // value={lastName}
+                        value={lastName}
                         onChange={(e) => setlastName(e.target.value)}
                         />
                     </Form.Group>
@@ -101,7 +199,7 @@ const Profile = props => {
                         <Form.Control
                         type="text"
                         placeholder="Address"
-                        // value={address}
+                        value={address}
                         onChange={(e) => setAddress(e.target.value)}
                         />
                     </Form.Group>
@@ -118,7 +216,7 @@ const Profile = props => {
                         <Form.Control
                         type="text"
                         placeholder="City"
-                        // value={address}
+                        value={city}
                         onChange={(e) => setCity(e.target.value)}
                         />
                     </Form.Group>
@@ -135,7 +233,7 @@ const Profile = props => {
                         <Form.Control
                             as="select"
                             onChange={(e) => setState(e.target.value)}
-                            defaultValue={"MA"}
+                            value={state}
                         >
                             { states.map((aState, i) =>{
                                 return (
@@ -177,7 +275,7 @@ const Profile = props => {
                         <Form.Control
                         type="text"
                         placeholder="ZIP code"
-                        // value={country}
+                        value={zipCode}
                         onChange={(e) => setZipCode(e.target.value)}
                         />
                     </Form.Group>
@@ -194,7 +292,7 @@ const Profile = props => {
                         <Form.Control
                         type="text"
                         placeholder="Credit/Debit Card Number"
-                        // value={country}
+                        value={creditCardNumber}
                         onChange={(e) => setCreditCardNumber(generateRandomCCNumber())}
                         />
                     </Form.Group>
@@ -211,7 +309,7 @@ const Profile = props => {
                         <Form.Control
                         type="text"
                         placeholder="CVV"
-                        // value={country}
+                        value={cvv}
                         onChange={(e) => setCVV(generateRandomCVV)}
                         />
                     </Form.Group>
@@ -221,7 +319,7 @@ const Profile = props => {
                 <Button
                     variant="primary"
                     type="button"
-                    onClick={updateInformation}
+                    onClick={() => submitProfile()}
                 >
                     Update Information
                 </Button>

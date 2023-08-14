@@ -89,7 +89,7 @@ function App() {
             <Ticket />}
           />
           <Route exact path="/profile" element={
-            <Profile />}
+            <Profile user={ user }/>}
           />
         </Routes>
       </div>
