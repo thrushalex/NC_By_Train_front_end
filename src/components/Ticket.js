@@ -24,6 +24,7 @@ const Ticket = ({ user }) => {
     const [ticketCount, setTicketCount] = useState(0);
     const [tickets, setTickets] = useState([]);
     const [userId, setUserId] = useState("");
+    const [ticketsPurchased, setTicketsPurchased] = useState(0);
 
     useEffect(() => {
         if (user) {
@@ -38,7 +39,7 @@ const Ticket = ({ user }) => {
 
     useEffect(() => {
         retrieveTickets(userId);
-    }, [userId])
+    }, [userId, ticketsPurchased])
 
     useEffect(() => {
         retrieveRouteStops();
@@ -110,12 +111,11 @@ const Ticket = ({ user }) => {
             }       
             TicketsDataService.addTicket(data)
             .then(response => {
-                console.log(response.data);
+                setTicketsPurchased(ticketsPurchased + 1);
             })
             .catch(e => {
                 console.log(e);
             });
-            retrieveTickets(userId);
         } else {
             toast("Purchase not complete, please be sure to fill out all fields");
         }
