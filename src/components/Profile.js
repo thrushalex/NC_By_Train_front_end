@@ -19,6 +19,9 @@ const Profile = props => {
     const [zipCode, setZipCode] = useState("");
     const [creditCardNumber, setCreditCardNumber] = useState("");
     const [cvv, setCVV] = useState("");
+    const states = ["AL", "AK", "AZ", "AR", "AS", "CA", "CO", "CT", "DE", "DC", "FL", "GA", "GU", "HI", "ID", "IL", "IN", "IA", "KS",
+    "KY", "LA", "ME", "MD", "MA", "MI", "MN", "MS", "MO", "MT", "NE", "NV", "NH", "NJ", "NM", "NY", "NC", "ND", "MP",
+    "OH", "OK", "OR", "PA", "PR", "RI", "SC", "SD", "TN", "TX", "TT", "UT", "VT", "VA", "VI", "WA", "WV", "WI", "WY"];
 
     const updateInformation = () => {
         console.log("First name is:", firstName);
@@ -130,11 +133,19 @@ const Profile = props => {
                 <Col>
                     <Form.Group className="mb-3">
                         <Form.Control
-                        type="text"
-                        placeholder="State"
-                        // value={address}
-                        onChange={(e) => setState(e.target.value)}
-                        />
+                            as="select"
+                            onChange={(e) => setState(e.target.value)}
+                            defaultValue={"MA"}
+                        >
+                            { states.map((aState, i) =>{
+                                return (
+                                    <option value={aState}
+                                    key={i}>
+                                        {aState}
+                                    </option>
+                                )
+                            })}
+                        </Form.Control>
                     </Form.Group>
                 </Col>
             </Row>
@@ -150,7 +161,7 @@ const Profile = props => {
                         type="text"
                         placeholder="Country"
                         value={country}
-                        onChange={(e) => setCountry(e.target.value)}
+                        // onChange={(e) => setCountry(e.target.value)}
                         />
                     </Form.Group>
                 </Col>
