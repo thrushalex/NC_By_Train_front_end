@@ -8,6 +8,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 import RoutesList from "./components/RoutesList.js";
 import Timetable from "./components/Timetable.js";
 import Ticket from "./components/Ticket.js";
+import Profile from "./components/Profile.js";
 import Login from "./components/Login";
 import Logout from "./components/Logout";
 
@@ -57,7 +58,7 @@ function App() {
                   Tickets
                 </Nav.Link>
                 { user && (
-                  <Nav.Link as={Link} to="/tickets">
+                  <Nav.Link as={Link} to="/profile">
                     Profile
                   </Nav.Link>
                                     )}
@@ -86,6 +87,9 @@ function App() {
           />
           <Route exact path="/tickets" element={
             <Ticket />}
+          />
+          <Route exact path="/profile" element={
+            <Profile />}
           />
         </Routes>
       </div>
