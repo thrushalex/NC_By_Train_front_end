@@ -27,6 +27,8 @@ const Ticket = ({ user }) => {
     const [userId, setUserId] = useState("");
     const [ticketsPurchased, setTicketsPurchased] = useState(0);
     const [profileExists, setProfileExists] = useState(false);
+    const [price, setPrice] = useState(0.00);
+    const [distance, setDistance] = useState(0);
 
     useEffect(() => {
         if (user) {
@@ -53,6 +55,11 @@ const Ticket = ({ user }) => {
     useEffect(() => {
         getProfile();
     }, [userId])
+
+    useEffect(() => {
+        console.log("test");
+        updatePrice();
+    }, [route, origin, destination, ticketCount, distance])
 
     const getProfile = useCallback(() => {
         ProfilesDataService.getProfile(userId)
@@ -89,11 +96,19 @@ const Ticket = ({ user }) => {
         }
     }, [route])
 
+    const updatePrice = useCallback(() => {
+        if (route !== "Select a Route" && origin !== "Select a Stop" && destination !== "Select a Stop" && ticketCount !== 0) {
+            getSegmentDistance(route, origin, destination);
+            console.log("distance is: ", distance);
+            let price = (distance * ticketCount * 0.17).toFixed(2);
+            setPrice(price);
+        }
+    }, [route, origin, destination, ticketCount, distance])
+
     const retrieveTickets = (userId) => {
         TicketsDataService.getTicketsByUserId(userId)
         .then(response => {
             setTickets(response.data);
-            console.log(response.data);
         })
         .catch(e => {
             console.log(e);
@@ -104,6 +119,16 @@ const Ticket = ({ user }) => {
         TicketsDataService.deleteExpiredTickets(userId)
         .then(response => {
             retrieveTickets(userId);
+        })
+        .catch(e => {
+            console.log(e);
+        })
+    }
+
+    const getSegmentDistance = (routeName, origin, destination) => {
+        RoutesDataService.getSegmentDistance(routeName, origin, destination)
+        .then(response => {
+            setDistance(response.data);
         })
         .catch(e => {
             console.log(e);
@@ -251,6 +276,11 @@ const Ticket = ({ user }) => {
                                     }}>
                                 <BsPlus className="BsPlus" />
                             </Button>
+                        </Col>
+                        <Col>
+                            <div>
+                                Price: ${price}
+                            </div>
                         </Col>
                         <Col>
                             <Button
