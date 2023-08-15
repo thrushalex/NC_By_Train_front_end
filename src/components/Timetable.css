@@ -11,8 +11,17 @@
 
 .timetable{
     border: 1px solid black;
+    border-radius: 10px;
 }
 
 .titleText{
     text-align: center;
 }
+
+tr:nth-child(even) {
+    background-color: rgba(150, 212, 212, 0.4);
+  }
+  
+  th:nth-child(even),td:nth-child(even) {
+    background-color: rgba(150, 212, 212, 0.4);
+  }
