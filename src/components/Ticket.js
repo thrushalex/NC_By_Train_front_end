@@ -28,7 +28,6 @@ const Ticket = ({ user }) => {
 
     useEffect(() => {
         if (user) {
-            console.log("userId: ", user.googleId);
             setUserId(user.googleId);
         }
     }, [user])
@@ -97,7 +96,6 @@ const Ticket = ({ user }) => {
         setOrigin("Select a Stop");
         setDestination("Select a Stop");
         retrieveRouteStops();
-        console.log(route ,origin, destination);
     }
 
     const onChangeOrigin = e => {
@@ -109,7 +107,6 @@ const Ticket = ({ user }) => {
     }
     
     const purchase = () => {
-        console.log(ticketCount);
         if (
             route !== "Select a Route" &&
             origin !== "Select a Stop" &&
@@ -138,8 +135,6 @@ const Ticket = ({ user }) => {
     const activateTicket = (ticketId) => {
         TicketsDataService.activateTicketById({ticketId: ticketId})
         .then(response => {
-            console.log("activate button pressed");
-            console.log(response.data.status);
             retrieveTickets(userId);
         })
         .catch(e => {
@@ -213,7 +208,6 @@ const Ticket = ({ user }) => {
                                     variant="primary"
                                     type="button"
                                     onClick={() => {
-                                        console.log("minus clicked");
                                         if (ticketCount > 0) {
                                             setTicketCount(ticketCount - 1);
                                         }
@@ -231,7 +225,6 @@ const Ticket = ({ user }) => {
                                     variant="primary"
                                     type="button"
                                     onClick={() => {
-                                        console.log("plus clicked");
                                         setTicketCount(ticketCount + 1);
                                     }}>
                                 <BsPlus className="BsPlus" />
