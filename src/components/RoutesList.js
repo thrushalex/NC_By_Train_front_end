@@ -1,12 +1,16 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { useNavigate } from "react-router-dom";
 import RoutesDataService from "../services/routes";
 import Button from 'react-bootstrap/Button';
+import Col from 'react-bootstrap/Col';
+import Row from 'react-bootstrap/Row';
 
 import './RoutesList.css';
 
 const RoutesList = props => {
 
     const [routes, setRoutes] = useState([]);
+    const navigate = useNavigate();
 
     const retrieveRoutes = useCallback(() => {
         RoutesDataService.getAll()
@@ -27,27 +31,43 @@ const RoutesList = props => {
             { routes.map((route, index) => {
                 return (
                     <div className='routeContainer'>
-                        <div className='routeName'>
-                            {route.name}
-                        </div>
-                        <div className='routeDescription'>
-                            {route.description}
-                        </div>
-                        <div className='routeButtons'>
-                            <Button variant="link" onClick={() => {
-                                // Show list of cities
-                                console.log("hi");
-                            }}>
-                                View Timetable
-                            </Button>
-                            <Button variant="link" onClick={() => {
-                                // Show list of cities
-                                console.log("hi");
-                            }}>
-                                Buy Ticket
-                            </Button>
-
-                        </div>
+                        <Row>
+                            <div className='routeName'>
+                                Route Name: {route.name}
+                            </div>
+                        </Row>
+                        <Row>
+                            <div className='routeDescription'>
+                                Description: {route.description}
+                            </div>
+                        </Row>
+                        <Row>
+                            <Col>
+                                <Button 
+                                    variant="primary"
+                                    type="button"
+                                    onClick={() => {
+                                        navigate("/timetable/");
+                                    }}>
+                                        <div>
+                                            View Timetable
+                                        </div>
+                                </Button>
+                            </Col>
+                            <Col>
+                                <Button 
+                                    variant="primary"
+                                    type="button"
+                                    onClick={() => {
+                                        navigate("/tickets/");
+                                    }}>
+                                        <div>
+                                            Buy Ticket
+                                        </div>
+                                        
+                                </Button>
+                            </Col>
+                        </Row>
                     </div>
                 )
             })}
