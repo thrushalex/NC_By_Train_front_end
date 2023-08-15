@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import RoutesDataService from "../services/routes";
 import TicketsDataService from "../services/tickets";
+import ProfilesDataService from "../services/profiles";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -25,6 +26,7 @@ const Ticket = ({ user }) => {
     const [tickets, setTickets] = useState([]);
     const [userId, setUserId] = useState("");
     const [ticketsPurchased, setTicketsPurchased] = useState(0);
+    const [profileExists, setProfileExists] = useState(false);
 
     useEffect(() => {
         if (user) {
@@ -47,6 +49,23 @@ const Ticket = ({ user }) => {
     useEffect(() => {
         retrieveRouteStops();
     }, [route])
+
+    useEffect(() => {
+        getProfile();
+    }, [userId])
+
+    const getProfile = useCallback(() => {
+        ProfilesDataService.getProfile(userId)
+        .then(response => {
+            setProfileExists(true);
+        })
+        .catch(e => {
+            console.log(e);
+            if (e.response.data.error && e.response.data.error === "not found") {
+                setProfileExists(false);
+            }
+        })
+    }, [userId])
 
     const retrieveRoutes = useCallback(() => {
         RoutesDataService.getRouteNames()
@@ -111,7 +130,8 @@ const Ticket = ({ user }) => {
             route !== "Select a Route" &&
             origin !== "Select a Stop" &&
             destination !== "Select a Stop" &&
-            destination !== origin
+            destination !== origin &&
+            profileExists === true
         ) {
             const data = {
                 userId: userId,
@@ -127,6 +147,8 @@ const Ticket = ({ user }) => {
             .catch(e => {
                 console.log(e);
             });
+        } else if (profileExists === false) {
+            toast("Please fill out your profile information before attempting to purchase a ticket");
         } else {
             toast("Purchase not complete, please be sure to fill out all fields");
         }
