@@ -1,5 +1,16 @@
 # Lucky Strike CS5610 Final Project Front End
 
+Work done for Iteration 3 (Alex Thrush):
+- Implemented Ticket.js to allow the purchase and viewing of tickets
+- Implemented Profile.js to allow the creation, updating, and viewing of profile information
+- Made small formatting changes to various elements of the site
+- Created TicketsDataService and ProfilesDataService to interact with new methods on the backend
+- Tested new features by creating profile, updating it, deleting it, attempting to purchase different tickets, confirming that expired tickets were deleted automatically
+
+![Alt text](public/images/iter3frontend_tickets.PNG?raw=true "Tickets page")
+
+![Alt text](public/images/iter3frontend_profile.PNG?raw=true "Profile page")
+
 Work done for Iteration 2 (Alex Thrush):
 - Implemented Timetable.js functionality for displaying timetables
 - Added route to App.js, updated navabr link
