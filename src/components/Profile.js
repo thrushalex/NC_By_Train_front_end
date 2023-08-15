@@ -282,6 +282,11 @@ const Profile = ({ user }) => {
                 </Col>
             </Row>
             <Row>
+                <div className="warningText">
+                    NOTE: Enter one digit to generate a random CC/CVV number
+                </div>
+            </Row>
+            <Row>
                 <Col>
                     <div className='labelText'>
                         Credit/Debit Card Number
